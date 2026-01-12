@@ -1,0 +1,81 @@
+import prisma from 'infrastructure/db/prisma.ts';
+import { IUserRepository } from 'domain/repositories/user.repository.interface.ts';
+import { User } from 'domain/entities/user.entity.ts';
+
+export class PrismaUserRepository implements IUserRepository {
+    async create(user: User): Promise<User> {
+        const created = await prisma.user.create({
+            data: {
+                companyId: user.companyId,
+                name: user.name,
+                email: user.email,
+                passwordHash: user.passwordHash,
+                role: user.role
+            }
+        });
+
+        return new User(
+            created.id,
+            created.companyId,
+            created.name,
+            created.email,
+            created.passwordHash,
+            created.role as any,
+            created.lastLoginAt,
+            created.createdAt
+        );
+    }
+
+    async findById(id: string): Promise<User | null> {
+        const user = await prisma.user.findUnique({
+            where: { id }
+        });
+
+        if (!user) return null;
+
+        return new User(
+            user.id,
+            user.companyId,
+            user.name,
+            user.email,
+            user.passwordHash,
+            user.role as any,
+            user.lastLoginAt,
+            user.createdAt
+        );
+    }
+
+    async findByEmail(companyId: string, email: string): Promise<User | null> {
+        const user = await prisma.user.findUnique({
+            where: {
+                companyId_email: {
+                    companyId,
+                    email
+                }
+            }
+        });
+
+        if (!user) return null;
+
+        return new User(
+            user.id,
+            user.companyId,
+            user.name,
+            user.email,
+            user.passwordHash,
+            user.role as any,
+            user.lastLoginAt,
+            user.createdAt
+        );
+    }
+
+    async existsByEmailInCompany(companyId: string, email: string): Promise<boolean> {
+        const count = await prisma.user.count({
+            where: {
+                companyId,
+                email
+            }
+        });
+        return count > 0;
+    }
+}

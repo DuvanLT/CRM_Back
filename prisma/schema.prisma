@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Enums
+enum CompanyStatus {
+  demo
+  active
+  suspended
+
+  @@map("company_status")
+}
+
+enum UserRole {
+  owner
+  agent
+
+  @@map("user_rol")
+}
+
+// Models
+model License {
+  id                 String    @id @default(uuid()) @db.Uuid
+  name               String    @db.VarChar(50)
+  maxUsers           Int       @map("max_users")
+  maxMessagesMonth   Int       @map("max_messages_month")
+  maxCampaignsMonth  Int       @map("max_campaigns_month")
+  maxStorageMb       Int       @map("max_storage_mb")
+  priceMonthly       Decimal?  @map("price_monthly") @db.Decimal(10, 2)
+  priceYearly        Decimal?  @map("price_yearly") @db.Decimal(10, 2)
+  createdAt          DateTime  @default(now()) @map("created_at")
+
+  companies Company[]
+
+  @@map("licenses")
+}
+
+model Company {
+  id        String        @id @default(uuid()) @db.Uuid
+  name      String        @db.VarChar(120)
+  taxId     String?       @map("tax_id") @db.VarChar(50)
+  email     String?       @db.VarChar(120)
+  phone     String?       @db.VarChar(30)
+  country   String?       @db.VarChar(50)
+  licenseId String        @map("license_id") @db.Uuid
+  status    CompanyStatus @default(demo)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @default(now()) @updatedAt @map("updated_at")
+
+  license License @relation(fields: [licenseId], references: [id])
+  users   User[]
+
+  @@map("companies")
+}
+
+model User {
+  id           String    @id @default(uuid()) @db.Uuid
+  companyId    String    @map("company_id") @db.Uuid
+  name         String    @db.VarChar(120)
+  email        String    @db.VarChar(120)
+  passwordHash String    @map("password_hash") @db.Text
+  role         UserRole? @map("role")
+  lastLoginAt  DateTime? @map("last_login_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  company Company @relation(fields: [companyId], references: [id])
+
+  @@unique([companyId, email])
+  @@map("users")
+}

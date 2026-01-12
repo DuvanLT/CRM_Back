@@ -1,0 +1,1 @@
+export type CompanyStatus = 'demo' | 'active' | 'suspended'
