@@ -4,5 +4,6 @@ export interface IUserRepository {
     create(user: User): Promise<User>;
     findById(id: string): Promise<User | null>;
     findByEmail(companyId: string, email: string): Promise<User | null>;
-    existsByEmailInCompany(companyId: string, email: string): Promise<boolean>;
+    findByEmailGlobal(email: string): Promise<User | null>;
+    hasCreatedCompany(email: string): Promise<boolean>;
 }

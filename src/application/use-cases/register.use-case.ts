@@ -19,6 +19,14 @@ export class RegisterUseCase {
         console.log('UC: inicio');
         try {
             console.log('UC: dentro del try');
+
+            const hasCreatedCompany = await this.userRepo.hasCreatedCompany(dto.ownerEmail);
+            if (hasCreatedCompany) {
+                return ResultFactory.failure(
+                    'You have already created a company. A user can only create one company.',
+                    'OWNER_ALREADY_EXISTS'
+                );
+            }
             // 1. Validar que el email de la compañía no exista
             if (dto.companyEmail) {
                 const emailExists = await this.companyRepo.existsByEmail(dto.companyEmail);
@@ -50,6 +58,27 @@ export class RegisterUseCase {
                 );
             }
 
+            // 2.1 Validar que el password tenga al menos 8 caracteres
+            if (dto.password.length < 8) {
+                return ResultFactory.failure(
+                    'Password must have at least 8 characters',
+                    'PASSWORD_TOO_SHORT'
+                );
+            }
+
+            if (dto.password) {
+                const hasUpperCase = /[A-Z]/.test(dto.password);
+                const hasLowerCase = /[a-z]/.test(dto.password);
+                const hasNumber = /[0-9]/.test(dto.password);
+                const hasSpecialChar = /[^a-zA-Z0-9]/.test(dto.password);
+                if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
+                    return ResultFactory.failure(
+                        'Password must have at least an mayus letter, a number and a special character',
+                        'PASSWORD_TOO_WEAK'
+                    );
+                }
+            }
+
             // 3. Hash de password
             const passwordHash = await bcrypt.hash(dto.password, 10);
 
@@ -64,19 +93,6 @@ export class RegisterUseCase {
             );
 
             const createdCompany = await this.companyRepo.create(company);
-
-            // 5. Verificar que el email del owner no exista en esta compañía
-            const ownerEmailExists = await this.userRepo.existsByEmailInCompany(
-                createdCompany.id!,  // ✅ Agregar ! porque ahora tiene ID
-                dto.ownerEmail
-            );
-
-            if (ownerEmailExists) {
-                return ResultFactory.failure(
-                    'Owner email already exists in this company',
-                    'OWNER_EMAIL_EXISTS'
-                );
-            }
 
             // 6. Crear usuario owner
             const owner = User.create(

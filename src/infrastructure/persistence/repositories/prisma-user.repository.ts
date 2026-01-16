@@ -69,13 +69,33 @@ export class PrismaUserRepository implements IUserRepository {
         );
     }
 
-    async existsByEmailInCompany(companyId: string, email: string): Promise<boolean> {
-        const count = await prisma.user.count({
+    async hasCreatedCompany(email: string): Promise<boolean> {
+        const ownerUser = await prisma.user.findFirst({
             where: {
-                companyId,
-                email
+                email,
+                role: 'owner' // ✅ Solo busca si tiene rol de owner
             }
         });
-        return count > 0;
+        return !!ownerUser;
     }
+
+    async findByEmailGlobal(email: string): Promise<User | null> {
+        const user = await prisma.user.findFirst({
+            where: { email }
+        });
+
+        if (!user) return null;
+
+        return new User(
+            user.id,
+            user.companyId,
+            user.name,
+            user.email,
+            user.passwordHash,
+            user.role as any,
+            user.lastLoginAt,
+            user.createdAt
+        );
+    }
+
 }
