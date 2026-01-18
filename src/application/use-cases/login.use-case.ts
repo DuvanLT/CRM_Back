@@ -31,7 +31,7 @@ export class LoginUseCase {
             }
 
             // 3. Verificar contraseña
-            const isPasswordValid = await bcrypt.compare(dto.password, user.passwordHash);
+            const isPasswordValid = await bcrypt.compare(dto.password, user.passwordHash!);
 
             if (!isPasswordValid) {
                 return ResultFactory.failure(

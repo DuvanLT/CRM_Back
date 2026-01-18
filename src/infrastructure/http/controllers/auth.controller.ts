@@ -26,8 +26,6 @@ export class AuthController {
                 });
             }
 
-
-
             const result = await this.registerUseCase.execute(dto);
 
             if (!result.success) {

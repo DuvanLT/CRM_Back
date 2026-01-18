@@ -9,7 +9,7 @@ export class PrismaUserRepository implements IUserRepository {
                 companyId: user.companyId,
                 name: user.name,
                 email: user.email,
-                passwordHash: user.passwordHash,
+                passwordHash: user.passwordHash!,
                 role: user.role
             }
         });
@@ -96,6 +96,64 @@ export class PrismaUserRepository implements IUserRepository {
             user.lastLoginAt,
             user.createdAt
         );
+    }
+
+    async findByEmailAndCompany(email: string, companyId: string): Promise<User | null> {
+        const user = await prisma.user.findFirst({
+            where: {
+                email,
+                companyId
+            }
+        });
+
+        if (!user) return null;
+
+        return new User(
+            user.id,
+            user.companyId,
+            user.name,
+            user.email,
+            user.passwordHash,
+            user.role as any,
+            user.lastLoginAt,
+            user.createdAt
+        );
+    }
+
+    async countByCompanyId(companyId: string): Promise<number> {
+        return await prisma.user.count({
+            where: {
+                companyId
+            }
+        })
+    }
+
+    async listUsersByCompanyId(companyId: string): Promise<User[]> {
+        const users = await prisma.user.findMany({
+            where: {
+                companyId
+            }
+        });
+
+        return users.map(user => new User(
+            user.id,
+            user.companyId,
+            user.name,
+            user.email,
+            null,
+            user.role as any,
+            user.lastLoginAt,
+            user.createdAt
+        ));
+    }
+
+    async countOwnersByCompanyId(companyId: string): Promise<number> {
+        return await prisma.user.count({
+            where: {
+                companyId,
+                role: 'owner'
+            }
+        });
     }
 
 }

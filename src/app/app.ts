@@ -7,7 +7,14 @@ import fastifyJwt from '@fastify/jwt';
 import { authRoutes } from '../infrastructure/http/routes/auth.routes.ts';
 import prisma from '../infrastructure/db/prisma.ts'
 import authPlugin from '../infrastructure/http/plugins/auth.plugin.ts';
-
+import { setupInvitationModule } from '../infrastructure/container/invitationModule.ts'
+import { PrismaCompanyRepository } from '../infrastructure/persistence/repositories/prisma-company.repository.ts';
+import { PrismaUserRepository } from '../infrastructure/persistence/repositories/prisma-user.repository.ts';
+import { EmailService } from '../infrastructure/service/email.service.ts';
+import { CompanyController } from '../infrastructure/http/controllers/company.controller.ts';
+import { CountCompanyUsersUseCase } from '../application/use-cases/count-company-users.use-case.ts';
+import { companyRoutes } from '../infrastructure/http/routes/company.routes.ts';
+import { ListCompanyUsersUseCase } from '../application/use-cases/company-users.use-case.ts';
 export class App {
     private fastify = Fastify({ logger: true });
     private async setupPlugins() {
@@ -47,6 +54,22 @@ export class App {
         });
 
         await this.fastify.register(authRoutes, { prefix: '/api/auth' });
+
+        await setupInvitationModule(this.fastify, {
+            companyRepository: new PrismaCompanyRepository(),
+            userRepository: new PrismaUserRepository(),
+            emailService: new EmailService()
+        })
+
+        const companyRepository = new PrismaCompanyRepository();
+        const userRepository = new PrismaUserRepository();
+        const countCompanyUsersUseCase = new CountCompanyUsersUseCase(companyRepository, userRepository);
+        const listCompanyUsersUseCase = new ListCompanyUsersUseCase(companyRepository, userRepository);
+        const companyController = new CompanyController(countCompanyUsersUseCase, listCompanyUsersUseCase);
+
+        await this.fastify.register(async (instance) => {
+            await companyRoutes(instance, companyController);
+        }, { prefix: '/api/v1' });
     }
 
     public async start(port: number = 3000) {

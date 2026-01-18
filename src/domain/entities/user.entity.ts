@@ -6,7 +6,7 @@ export class User {
         public companyId: string,
         public name: string,
         public email: string,
-        public passwordHash: string,
+        public passwordHash: string | null,
         public role: UserRole,
         public lastLoginAt: Date | null,
         public readonly createdAt: Date
@@ -20,7 +20,7 @@ export class User {
         role: UserRole = 'owner'
     ): User {
         return new User(
-            null, // Se generará en la DB
+            null,
             companyId,
             name,
             email,
