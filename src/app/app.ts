@@ -5,6 +5,7 @@ import helmet from '@fastify/helmet';
 import fastifyCookie from '@fastify/cookie';
 import fastifyJwt from '@fastify/jwt';
 import { authRoutes } from '../infrastructure/http/routes/auth.routes.ts';
+import { webhookRoutes } from '../infrastructure/http/routes/webhook.routes.ts';
 import prisma from '../infrastructure/db/prisma.ts'
 import authPlugin from '../infrastructure/http/plugins/auth.plugin.ts';
 import { setupInvitationModule } from '../infrastructure/container/invitationModule.ts'
@@ -15,6 +16,8 @@ import { CompanyController } from '../infrastructure/http/controllers/company.co
 import { CountCompanyUsersUseCase } from '../application/use-cases/count-company-users.use-case.ts';
 import { companyRoutes } from '../infrastructure/http/routes/company.routes.ts';
 import { ListCompanyUsersUseCase } from '../application/use-cases/company-users.use-case.ts';
+import { ChangeRolUseCase } from '../application/use-cases/change-rol.use-case.ts';
+import { ValidateOwnerLimitUseCase } from '../application/use-cases/validate-owner-limit.use-case.ts';
 export class App {
     private fastify = Fastify({ logger: true });
     private async setupPlugins() {
@@ -54,6 +57,7 @@ export class App {
         });
 
         await this.fastify.register(authRoutes, { prefix: '/api/auth' });
+        await this.fastify.register(webhookRoutes, { prefix: '/api/webhook' });
 
         await setupInvitationModule(this.fastify, {
             companyRepository: new PrismaCompanyRepository(),
@@ -65,7 +69,9 @@ export class App {
         const userRepository = new PrismaUserRepository();
         const countCompanyUsersUseCase = new CountCompanyUsersUseCase(companyRepository, userRepository);
         const listCompanyUsersUseCase = new ListCompanyUsersUseCase(companyRepository, userRepository);
-        const companyController = new CompanyController(countCompanyUsersUseCase, listCompanyUsersUseCase);
+        const validateOwnerLimitUseCase = new ValidateOwnerLimitUseCase(userRepository);
+        const changeRolUseCase = new ChangeRolUseCase(userRepository, validateOwnerLimitUseCase);
+        const companyController = new CompanyController(countCompanyUsersUseCase, listCompanyUsersUseCase, changeRolUseCase);
 
         await this.fastify.register(async (instance) => {
             await companyRoutes(instance, companyController);

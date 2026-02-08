@@ -156,4 +156,21 @@ export class PrismaUserRepository implements IUserRepository {
         });
     }
 
+    async updateRole(userId: string, role: string): Promise<User> {
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: { role: role as any }
+        });
+
+        return new User(
+            updatedUser.id,
+            updatedUser.companyId,
+            updatedUser.name,
+            updatedUser.email,
+            updatedUser.passwordHash,
+            updatedUser.role as any,
+            updatedUser.lastLoginAt,
+            updatedUser.createdAt
+        );
+    }
 }

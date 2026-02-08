@@ -10,4 +10,5 @@ export interface IUserRepository {
     countByCompanyId(companyId: string): Promise<number>;
     countOwnersByCompanyId(companyId: string): Promise<number>;
     listUsersByCompanyId(companyId: string): Promise<User[]>;
+    updateRole(userId: string, role: string): Promise<User>;
 }

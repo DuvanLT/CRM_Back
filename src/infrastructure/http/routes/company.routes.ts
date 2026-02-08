@@ -8,4 +8,8 @@ export async function companyRoutes(fastify: FastifyInstance, companyController:
     fastify.get('/company/users', {
         preHandler: [fastify.authenticate]
     }, (request, reply) => companyController.listUsers(request, reply))
+
+    fastify.patch('/company/users/:userId/role', {
+        preHandler: [fastify.authenticate]
+    }, (request, reply) => companyController.changeUserRole(request, reply))
 }
