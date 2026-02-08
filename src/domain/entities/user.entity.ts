@@ -1,4 +1,4 @@
-import type { UserRole } from '../../shared/types/user.types.ts';
+import type { UserRole } from '../../shared/types/user.types.js';
 
 export class User {
     constructor(

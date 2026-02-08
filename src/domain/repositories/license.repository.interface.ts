@@ -1,4 +1,4 @@
-import type { License } from "../entities/license.entity.ts";
+import type { License } from "../entities/license.entity.js";
 
 export interface ILicenseRepository {
     findById(id: string): Promise<License | null>;

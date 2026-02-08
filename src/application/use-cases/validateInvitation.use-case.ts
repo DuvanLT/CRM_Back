@@ -1,5 +1,5 @@
-import { InvitationTokenService } from "../services/invitationToken.service.ts";
-import { ValidateInvitationResponseDto } from "../dtos/invitation.dto.ts";
+import { InvitationTokenService } from "../services/invitationToken.service.js";
+import { ValidateInvitationResponseDto } from "../dtos/invitation.dto.js";
 
 export class ValidateInvitationUseCase {
     constructor(private readonly tokenService: InvitationTokenService) { }

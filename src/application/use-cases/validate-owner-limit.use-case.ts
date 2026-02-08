@@ -1,4 +1,4 @@
-import type { IUserRepository } from "../../domain/repositories/user.repository.interface.ts";
+import type { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
 
 export class ValidateOwnerLimitUseCase {
     private readonly MAX_OWNERS = 2;

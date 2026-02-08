@@ -1,7 +1,7 @@
-import type { IUserRepository } from "../../domain/repositories/user.repository.interface.ts";
-import type { ValidateOwnerLimitUseCase } from "./validate-owner-limit.use-case.ts";
-import { Result, ResultFactory } from "../../shared/interfaces/result.interface.ts";
-import type { User } from "../../domain/entities/user.entity.ts";
+import type { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
+import type { ValidateOwnerLimitUseCase } from "./validate-owner-limit.use-case.js";
+import { Result, ResultFactory } from "../../shared/interfaces/result.interface.js";
+import type { User } from "../../domain/entities/user.entity.js";
 
 export class ChangeRolUseCase {
     constructor(

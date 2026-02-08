@@ -1,6 +1,6 @@
-import prisma from 'infrastructure/db/prisma.ts';// importa la instancia configurada
-import { ILicenseRepository } from 'domain/repositories/license.repository.interface.ts';
-import { License } from 'domain/entities/license.entity.ts';
+import prisma from 'infrastructure/db/prisma.js';// importa la instancia configurada
+import { ILicenseRepository } from 'domain/repositories/license.repository.interface.js';
+import { License } from 'domain/entities/license.entity.js';
 
 export class PrismaLicenseRepository implements ILicenseRepository {
     async findById(id: string): Promise<License | null> {

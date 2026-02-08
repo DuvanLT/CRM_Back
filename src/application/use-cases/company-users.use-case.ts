@@ -1,6 +1,6 @@
-import type { ICompanyRepository } from "../../domain/repositories/company.repository.interface.ts";
-import type { IUserRepository } from "../../domain/repositories/user.repository.interface.ts";
-import type { User } from "../../domain/entities/user.entity.ts";
+import type { ICompanyRepository } from "../../domain/repositories/company.repository.interface.js";
+import type { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
+import type { User } from "../../domain/entities/user.entity.js";
 
 export class ListCompanyUsersUseCase {
     constructor(

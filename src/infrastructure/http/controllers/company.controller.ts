@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import { CountCompanyUsersUseCase } from "../../../application/use-cases/count-company-users.use-case.ts";
-import { ListCompanyUsersUseCase } from "../../../application/use-cases/company-users.use-case.ts";
-import { ChangeRolUseCase } from "../../../application/use-cases/change-rol.use-case.ts";
+import { CountCompanyUsersUseCase } from "../../../application/use-cases/count-company-users.use-case.js";
+import { ListCompanyUsersUseCase } from "../../../application/use-cases/company-users.use-case.js";
+import { ChangeRolUseCase } from "../../../application/use-cases/change-rol.use-case.js";
 
 export class CompanyController {
     constructor(

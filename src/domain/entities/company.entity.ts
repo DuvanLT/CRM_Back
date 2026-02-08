@@ -1,4 +1,4 @@
-import type { CompanyStatus } from "../../shared/types/company.types.ts";
+import type { CompanyStatus } from "../../shared/types/company.types.js";
 
 export class Company {
     constructor(

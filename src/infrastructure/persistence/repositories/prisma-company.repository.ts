@@ -1,6 +1,6 @@
-import prisma from 'infrastructure/db/prisma.ts';
-import { ICompanyRepository } from 'domain/repositories/company.repository.interface.ts';
-import { Company } from 'domain/entities/company.entity.ts';
+import prisma from 'infrastructure/db/prisma.js';
+import { ICompanyRepository } from 'domain/repositories/company.repository.interface.js';
+import { Company } from 'domain/entities/company.entity.js';
 
 export class PrismaCompanyRepository implements ICompanyRepository {
     async create(company: Company): Promise<Company> {

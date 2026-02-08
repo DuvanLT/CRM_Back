@@ -1,5 +1,5 @@
-import type { ICompanyRepository } from "../../domain/repositories/company.repository.interface.ts";
-import type { IUserRepository } from "../../domain/repositories/user.repository.interface.ts";
+import type { ICompanyRepository } from "../../domain/repositories/company.repository.interface.js";
+import type { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
 
 export class CountCompanyUsersUseCase {
     constructor(

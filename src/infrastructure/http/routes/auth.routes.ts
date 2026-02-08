@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { authController } from '../../../modules/auth.module.ts';
+import { authController } from '../../../modules/auth.module.js';
 
 export async function authRoutes(fastify: FastifyInstance) {
     fastify.post('/register', async (request, reply) => {

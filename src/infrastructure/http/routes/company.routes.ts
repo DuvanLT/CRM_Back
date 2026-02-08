@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { CompanyController } from "../controllers/company.controller.ts";
+import { CompanyController } from "../controllers/company.controller.js";
 export async function companyRoutes(fastify: FastifyInstance, companyController: CompanyController) {
     fastify.get('/company/users/count', {
         preHandler: [fastify.authenticate]

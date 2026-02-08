@@ -1,7 +1,7 @@
-import type { IUserRepository } from '../../domain/repositories/user.repository.interface.ts';
-import type { ICompanyRepository } from '../../domain/repositories/company.repository.interface.ts';
-import type { LoginDto, LoginResponseDto } from '../dtos/login.dto.ts';
-import { Result, ResultFactory } from '../../shared/interfaces/result.interface.ts';
+import type { IUserRepository } from '../../domain/repositories/user.repository.interface.js';
+import type { ICompanyRepository } from '../../domain/repositories/company.repository.interface.js';
+import type { LoginDto, LoginResponseDto } from '../dtos/login.dto.js';
+import { Result, ResultFactory } from '../../shared/interfaces/result.interface.js';
 import * as bcrypt from 'bcrypt';
 
 export class LoginUseCase {

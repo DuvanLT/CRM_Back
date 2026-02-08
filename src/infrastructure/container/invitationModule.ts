@@ -1,9 +1,9 @@
 import { FastifyInstance } from 'fastify';
-import { InvitationTokenService } from '../../application/services/invitationToken.service.ts';
-import { CreateInvitationUseCase } from '../../application/use-cases/createInvitation.use-case.ts';
-import { ValidateInvitationUseCase } from '../../application/use-cases/validateInvitation.use-case.ts';
-import { AcceptInvitationUseCase } from '../../application/use-cases/acceptInvitation.use-case.ts';
-import { invitationRoutes } from '../../infrastructure/http/routes/invitation.routes.ts';
+import { InvitationTokenService } from '../../application/services/invitationToken.service.js';
+import { CreateInvitationUseCase } from '../../application/use-cases/createInvitation.use-case.js';
+import { ValidateInvitationUseCase } from '../../application/use-cases/validateInvitation.use-case.js';
+import { AcceptInvitationUseCase } from '../../application/use-cases/acceptInvitation.use-case.js';
+import { invitationRoutes } from '../../infrastructure/http/routes/invitation.routes.js';
 
 export async function setupInvitationModule(
     fastify: FastifyInstance,

@@ -1,9 +1,9 @@
 // src/infrastructure/http/controllers/auth.controller.ts
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { RegisterDto } from '../../../application/dtos/register.dto.ts';
-import { LoginDto } from '../../../application/dtos/login.dto.ts';
-import type { RegisterUseCase } from '../../../application/use-cases/register.use-case.ts';
-import type { LoginUseCase } from '../../../application/use-cases/login.use-case.ts';
+import { RegisterDto } from '../../../application/dtos/register.dto.js';
+import { LoginDto } from '../../../application/dtos/login.dto.js';
+import type { RegisterUseCase } from '../../../application/use-cases/register.use-case.js';
+import type { LoginUseCase } from '../../../application/use-cases/login.use-case.js';
 
 export class AuthController {
     constructor(

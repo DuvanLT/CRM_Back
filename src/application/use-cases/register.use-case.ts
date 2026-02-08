@@ -1,11 +1,11 @@
 // src/application/use-cases/register.use-case.ts
-import type { ICompanyRepository } from '../../domain/repositories/company.repository.interface.ts';
-import type { IUserRepository } from '../../domain/repositories/user.repository.interface.ts';
-import type { ILicenseRepository } from '../../domain/repositories/license.repository.interface.ts';
-import { Company } from '../../domain/entities/company.entity.ts';
-import { User } from '../../domain/entities/user.entity.ts';
-import type { RegisterDto, RegisterResponseDto } from '../dtos/register.dto.ts';
-import { Result, ResultFactory } from '../../shared/interfaces/result.interface.ts';
+import type { ICompanyRepository } from '../../domain/repositories/company.repository.interface.js';
+import type { IUserRepository } from '../../domain/repositories/user.repository.interface.js';
+import type { ILicenseRepository } from '../../domain/repositories/license.repository.interface.js';
+import { Company } from '../../domain/entities/company.entity.js';
+import { User } from '../../domain/entities/user.entity.js';
+import type { RegisterDto, RegisterResponseDto } from '../dtos/register.dto.js';
+import { Result, ResultFactory } from '../../shared/interfaces/result.interface.js';
 import * as bcrypt from 'bcrypt';
 
 export class RegisterUseCase {

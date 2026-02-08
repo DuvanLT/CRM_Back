@@ -1,6 +1,6 @@
-import type { CreateInvitationDto } from "../dtos/invitation.dto.ts";
-import { InvitationTokenService } from "../services/invitationToken.service.ts";
-import { IUserRepository } from "../../domain/repositories/user.repository.interface.ts";
+import type { CreateInvitationDto } from "../dtos/invitation.dto.js";
+import { InvitationTokenService } from "../services/invitationToken.service.js";
+import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
 
 export interface IEmailService {
     sendInvitation(params: {

@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { InvitationTokenPayload } from '../dtos/invitation.dto.ts';
+import { InvitationTokenPayload } from '../dtos/invitation.dto.js';
 
 export class InvitationTokenService {
     private readonly TOKEN_EXPIRATION = '24h';

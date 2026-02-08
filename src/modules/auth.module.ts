@@ -1,10 +1,10 @@
 
-import { PrismaCompanyRepository } from '../infrastructure/persistence/repositories/prisma-company.repository.ts';
-import { PrismaUserRepository } from '../infrastructure/persistence/repositories/prisma-user.repository.ts';
-import { PrismaLicenseRepository } from '../infrastructure/persistence/repositories/prisma-license.repository.ts';
-import { RegisterUseCase } from '../application/use-cases/register.use-case.ts';
-import { LoginUseCase } from '../application/use-cases/login.use-case.ts';
-import { AuthController } from 'infrastructure/http/controllers/auth.controller.ts';
+import { PrismaCompanyRepository } from '../infrastructure/persistence/repositories/prisma-company.repository.js';
+import { PrismaUserRepository } from '../infrastructure/persistence/repositories/prisma-user.repository.js';
+import { PrismaLicenseRepository } from '../infrastructure/persistence/repositories/prisma-license.repository.js';
+import { RegisterUseCase } from '../application/use-cases/register.use-case.js';
+import { LoginUseCase } from '../application/use-cases/login.use-case.js';
+import { AuthController } from 'infrastructure/http/controllers/auth.controller.js';
 // Repositorios
 const companyRepository = new PrismaCompanyRepository();
 const userRepository = new PrismaUserRepository();
