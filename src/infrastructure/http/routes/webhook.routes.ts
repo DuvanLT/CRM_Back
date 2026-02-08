@@ -3,11 +3,114 @@ import crypto from 'crypto';
 
 // Webhook secret for HMAC signature verification - should be set in environment variables
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || 'your-webhook-secret-here';
+// WaSenderAPI configuration
+const WASENDER_API_URL = 'https://api.wasenderapi.com';
+const API_ACCESS_TOKEN = process.env.API_ACCESS_TOKEN || '';
 
 export async function webhookRoutes(fastify: FastifyInstance) {
     // Configure to receive raw body for signature verification
     fastify.addContentTypeParser('*', { parseAs: 'buffer' }, (req, body, done) => {
         done(null, body);
+    });
+
+    // GET endpoint to fetch message logs from WaSenderAPI
+    fastify.get('/messages/:sessionId', async (request: FastifyRequest<{
+        Params: { sessionId: string };
+        Querystring: { page?: string; limit?: string };
+    }>, reply: FastifyReply) => {
+        try {
+            const { sessionId } = request.params;
+            const { page = '1', limit = '50' } = request.query;
+
+            if (!API_ACCESS_TOKEN) {
+                return reply.status(500).send({
+                    success: false,
+                    error: 'API Access Token not configured'
+                });
+            }
+
+            const response = await fetch(
+                `${WASENDER_API_URL}/api/whatsapp-sessions/${sessionId}/message-logs?page=${page}&limit=${limit}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${API_ACCESS_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                return reply.status(response.status).send({
+                    success: false,
+                    error: 'Failed to fetch messages from WaSenderAPI',
+                    details: errorData
+                });
+            }
+
+            const data = await response.json();
+
+            return reply.status(200).send({
+                success: true,
+                data
+            });
+        } catch (error) {
+            fastify.log.error({ err: error, message: 'Error fetching messages' });
+            return reply.status(500).send({
+                success: false,
+                error: 'Internal server error fetching messages'
+            });
+        }
+    });
+
+    // GET endpoint to fetch a specific message info
+    fastify.get('/messages/:sessionId/:msgId', async (request: FastifyRequest<{
+        Params: { sessionId: string; msgId: string };
+    }>, reply: FastifyReply) => {
+        try {
+            const { msgId } = request.params;
+
+            if (!API_ACCESS_TOKEN) {
+                return reply.status(500).send({
+                    success: false,
+                    error: 'API Access Token not configured'
+                });
+            }
+
+            const response = await fetch(
+                `${WASENDER_API_URL}/api/messages/${msgId}/info`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${API_ACCESS_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                return reply.status(response.status).send({
+                    success: false,
+                    error: 'Failed to fetch message info from WaSenderAPI',
+                    details: errorData
+                });
+            }
+
+            const data = await response.json();
+
+            return reply.status(200).send({
+                success: true,
+                data
+            });
+        } catch (error) {
+            fastify.log.error({ err: error, message: 'Error fetching message info' });
+            return reply.status(500).send({
+                success: false,
+                error: 'Internal server error fetching message info'
+            });
+        }
     });
 
     // POST endpoint to receive webhook data with signature verification
