@@ -1,6 +1,6 @@
 import prisma from '../../../infrastructure/db/prisma.js';
-import { IUserRepository } from 'domain/repositories/user.repository.interface.js';
-import { User } from 'domain/entities/user.entity.js';
+import { IUserRepository } from '../../../domain/repositories/user.repository.interface.js';
+import { User } from '../../../domain/entities/user.entity.js';
 
 export class PrismaUserRepository implements IUserRepository {
     async create(user: User): Promise<User> {
