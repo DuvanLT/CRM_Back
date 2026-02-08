@@ -9,6 +9,10 @@ const API_ACCESS_TOKEN = process.env.API_ACCESS_TOKEN || '';
 
 export async function webhookRoutes(fastify: FastifyInstance) {
     // Configure to receive raw body for signature verification
+    // Must explicitly override application/json to get raw buffer
+    fastify.addContentTypeParser('application/json', { parseAs: 'buffer' }, (req, body, done) => {
+        done(null, body);
+    });
     fastify.addContentTypeParser('*', { parseAs: 'buffer' }, (req, body, done) => {
         done(null, body);
     });
@@ -117,7 +121,17 @@ export async function webhookRoutes(fastify: FastifyInstance) {
     fastify.post('/receive', async (request: FastifyRequest, reply: FastifyReply) => {
         try {
             const signature = request.headers['x-webhook-signature'] as string;
-            const rawBody = request.body as Buffer;
+            const body = request.body;
+
+            // Convert body to string for signature verification
+            let bodyString: string;
+            if (Buffer.isBuffer(body)) {
+                bodyString = body.toString();
+            } else if (typeof body === 'object') {
+                bodyString = JSON.stringify(body);
+            } else {
+                bodyString = String(body);
+            }
 
             if (!signature) {
                 return reply.status(401).send({
@@ -129,7 +143,7 @@ export async function webhookRoutes(fastify: FastifyInstance) {
             // Calculate expected signature
             const expectedSignature = crypto
                 .createHmac('sha256', WEBHOOK_SECRET)
-                .update(rawBody)
+                .update(bodyString)
                 .digest('hex');
 
             // Verify signature
@@ -145,12 +159,16 @@ export async function webhookRoutes(fastify: FastifyInstance) {
                 });
             }
 
-            // Parse the body as JSON
+            // Parse the body as JSON if it's a buffer/string
             let payload: unknown;
-            try {
-                payload = JSON.parse(rawBody.toString());
-            } catch {
-                payload = rawBody.toString();
+            if (Buffer.isBuffer(body)) {
+                try {
+                    payload = JSON.parse(body.toString());
+                } catch {
+                    payload = body.toString();
+                }
+            } else {
+                payload = body;
             }
 
             const timestamp = new Date().toISOString();
