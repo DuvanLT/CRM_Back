@@ -1,4 +1,4 @@
-import prisma from 'infrastructure/db/prisma.js';
+import prisma from '../../../infrastructure/db/prisma.js';
 import { ICompanyRepository } from 'domain/repositories/company.repository.interface.js';
 import { Company } from 'domain/entities/company.entity.js';
 

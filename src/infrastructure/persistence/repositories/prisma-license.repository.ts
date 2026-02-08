@@ -1,4 +1,4 @@
-import prisma from 'infrastructure/db/prisma.js';// importa la instancia configurada
+import prisma from '../../../infrastructure/db/prisma.js';// importa la instancia configurada
 import { ILicenseRepository } from 'domain/repositories/license.repository.interface.js';
 import { License } from 'domain/entities/license.entity.js';
 

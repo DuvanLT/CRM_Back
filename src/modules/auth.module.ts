@@ -4,7 +4,7 @@ import { PrismaUserRepository } from '../infrastructure/persistence/repositories
 import { PrismaLicenseRepository } from '../infrastructure/persistence/repositories/prisma-license.repository.js';
 import { RegisterUseCase } from '../application/use-cases/register.use-case.js';
 import { LoginUseCase } from '../application/use-cases/login.use-case.js';
-import { AuthController } from 'infrastructure/http/controllers/auth.controller.js';
+import { AuthController } from '../infrastructure/http/controllers/auth.controller.js';
 // Repositorios
 const companyRepository = new PrismaCompanyRepository();
 const userRepository = new PrismaUserRepository();
