@@ -1,6 +1,6 @@
-import { CreateInvitationUseCase } from '../../../application/use-cases/createInvitation.use-case.ts';
-import { ValidateInvitationUseCase } from '../../../application/use-cases/validateInvitation.use-case.ts';
-import { AcceptInvitationUseCase } from '../../../application/use-cases/acceptInvitation.use-case.ts';
+import { CreateInvitationUseCase } from '../../../application/use-cases/createInvitation.use-case';
+import { ValidateInvitationUseCase } from '../../../application/use-cases/validateInvitation.use-case';
+import { AcceptInvitationUseCase } from '../../../application/use-cases/acceptInvitation.use-case';
 import { FastifyInstance } from 'fastify';
 
 export async function invitationRoutes(

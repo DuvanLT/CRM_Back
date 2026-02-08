@@ -1,8 +1,8 @@
-import { InvitationTokenService } from "../services/invitationToken.service.ts";
-import { IUserRepository } from "../../domain/repositories/user.repository.interface.ts";
-import { AcceptInvitationDto } from "../dtos/invitation.dto.ts";
+import { InvitationTokenService } from "../services/invitationToken.service.js";
+import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
+import { AcceptInvitationDto } from "../dtos/invitation.dto.js";
 import * as bcrypt from 'bcrypt';
-import { User } from "../../domain/entities/user.entity.ts";
+import { User } from "../../domain/entities/user.entity.js";
 export class AcceptInvitationUseCase {
     constructor(
         private readonly tokenService: InvitationTokenService,

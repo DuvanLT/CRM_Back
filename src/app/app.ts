@@ -4,20 +4,20 @@ import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import fastifyCookie from '@fastify/cookie';
 import fastifyJwt from '@fastify/jwt';
-import { authRoutes } from '../infrastructure/http/routes/auth.routes.ts';
-import { webhookRoutes } from '../infrastructure/http/routes/webhook.routes.ts';
-import prisma from '../infrastructure/db/prisma.ts'
-import authPlugin from '../infrastructure/http/plugins/auth.plugin.ts';
-import { setupInvitationModule } from '../infrastructure/container/invitationModule.ts'
-import { PrismaCompanyRepository } from '../infrastructure/persistence/repositories/prisma-company.repository.ts';
-import { PrismaUserRepository } from '../infrastructure/persistence/repositories/prisma-user.repository.ts';
-import { EmailService } from '../infrastructure/service/email.service.ts';
-import { CompanyController } from '../infrastructure/http/controllers/company.controller.ts';
-import { CountCompanyUsersUseCase } from '../application/use-cases/count-company-users.use-case.ts';
-import { companyRoutes } from '../infrastructure/http/routes/company.routes.ts';
-import { ListCompanyUsersUseCase } from '../application/use-cases/company-users.use-case.ts';
-import { ChangeRolUseCase } from '../application/use-cases/change-rol.use-case.ts';
-import { ValidateOwnerLimitUseCase } from '../application/use-cases/validate-owner-limit.use-case.ts';
+import { authRoutes } from '../infrastructure/http/routes/auth.routes.js';
+import { webhookRoutes } from '../infrastructure/http/routes/webhook.routes.js';
+import prisma from '../infrastructure/db/prisma.js';
+import authPlugin from '../infrastructure/http/plugins/auth.plugin.js';
+import { setupInvitationModule } from '../infrastructure/container/invitationModule.js';
+import { PrismaCompanyRepository } from '../infrastructure/persistence/repositories/prisma-company.repository.js';
+import { PrismaUserRepository } from '../infrastructure/persistence/repositories/prisma-user.repository.js';
+import { EmailService } from '../infrastructure/service/email.service.js';
+import { CompanyController } from '../infrastructure/http/controllers/company.controller.js';
+import { CountCompanyUsersUseCase } from '../application/use-cases/count-company-users.use-case.js';
+import { companyRoutes } from '../infrastructure/http/routes/company.routes.js';
+import { ListCompanyUsersUseCase } from '../application/use-cases/company-users.use-case.js';
+import { ChangeRolUseCase } from '../application/use-cases/change-rol.use-case.js';
+import { ValidateOwnerLimitUseCase } from '../application/use-cases/validate-owner-limit.use-case.js';
 export class App {
     private fastify = Fastify({ logger: true });
     private async setupPlugins() {
