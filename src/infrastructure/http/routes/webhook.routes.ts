@@ -123,14 +123,22 @@ export async function webhookRoutes(fastify: FastifyInstance) {
             const signature = request.headers['x-webhook-signature'] as string;
             const body = request.body;
 
-            // Convert body to string for signature verification
+            // Convert body to string/object for processing
             let bodyString: string;
+            let payload: unknown;
             if (Buffer.isBuffer(body)) {
                 bodyString = body.toString();
+                try {
+                    payload = JSON.parse(bodyString);
+                } catch {
+                    payload = bodyString;
+                }
             } else if (typeof body === 'object') {
+                payload = body;
                 bodyString = JSON.stringify(body);
             } else {
                 bodyString = String(body);
+                payload = bodyString;
             }
 
             if (!signature) {
@@ -140,18 +148,12 @@ export async function webhookRoutes(fastify: FastifyInstance) {
                 });
             }
 
-            // Calculate expected signature
-            const expectedSignature = crypto
-                .createHmac('sha256', WEBHOOK_SECRET)
-                .update(bodyString)
-                .digest('hex');
-
-            // Verify signature
-            if (signature !== expectedSignature) {
+            // WaSenderAPI sends the webhook secret directly as verification token
+            // Simple comparison instead of HMAC
+            if (signature !== WEBHOOK_SECRET) {
                 fastify.log.warn({
                     message: 'Invalid webhook signature',
-                    received: signature,
-                    expected: expectedSignature
+                    received: signature
                 });
                 return reply.status(401).send({
                     success: false,
@@ -159,17 +161,7 @@ export async function webhookRoutes(fastify: FastifyInstance) {
                 });
             }
 
-            // Parse the body as JSON if it's a buffer/string
-            let payload: unknown;
-            if (Buffer.isBuffer(body)) {
-                try {
-                    payload = JSON.parse(body.toString());
-                } catch {
-                    payload = body.toString();
-                }
-            } else {
-                payload = body;
-            }
+
 
             const timestamp = new Date().toISOString();
 
