@@ -202,4 +202,46 @@ export async function webhookRoutes(fastify: FastifyInstance) {
             timestamp: new Date().toISOString()
         });
     });
+
+    // --- Meta (WhatsApp Cloud API) Webhooks ---
+
+    // GET verify token
+    fastify.get('/meta', async (request: FastifyRequest, reply: FastifyReply) => {
+        const query = request.query as any;
+
+        const mode = query['hub.mode'];
+        const token = query['hub.verify_token'];
+        const challenge = query['hub.challenge'];
+
+        // Check if a token and mode is in the query string of the request
+        if (mode && token) {
+            // Check the mode and token sent is correct
+            if (mode === 'subscribe' && token === process.env.META_VERIFY_TOKEN) {
+                // Respond with the challenge token from the request
+                fastify.log.info('WEBHOOK_VERIFIED');
+                return reply.status(200).send(challenge);
+            } else {
+                // Respond with '403 Forbidden' if verify tokens do not match
+                return reply.code(403).send('Forbidden');
+            }
+        }
+        return reply.code(400).send('Bad Request');
+    });
+
+    // POST receive messages
+    fastify.post('/meta/receive', async (request: FastifyRequest, reply: FastifyReply) => {
+        const body = request.body as any;
+
+        // Log the incoming webhook for debugging
+        fastify.log.info({
+            message: 'Meta Webhook received',
+            type: 'meta',
+            payload: body
+        });
+
+        // TODO: Process messages here (extract message, sender, etc.)
+
+        // Meta expects a 200 OK response immediately
+        return reply.status(200).send('EVENT_RECEIVED');
+    });
 }
